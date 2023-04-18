@@ -33,6 +33,10 @@ dependencies {
     implementation("io.ktor:ktor-server-cors-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-swagger:$ktor_version")
 
+    // LINE
+    implementation("com.linecorp.bot:line-bot-model:6.0.0")
+    implementation("com.linecorp.bot:line-bot-parser:6.0.0")
+
     // Logger
     implementation("ch.qos.logback:logback-classic:$logback_version")
 
