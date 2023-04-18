@@ -1,6 +1,7 @@
 package me.konso.home_watchdog
 
 import io.ktor.server.application.*
+import io.ktor.utils.io.charsets.Charsets
 import me.konso.home_watchdog.plugins.configureLogging
 import me.konso.home_watchdog.plugins.configureRouting
 import java.io.File
@@ -16,6 +17,11 @@ fun Application.module() {
     configureRouting()
 }
 
+
+/**
+ * .envファイルを読み取りシステムプロパティに定義する関数
+ * ファイルフォーマットは``KEY=VALUE``として読み取ります。
+ */
 fun setEnvParam(){
     val logger = Store.SystemLogger
 
@@ -28,7 +34,7 @@ fun setEnvParam(){
     }
 
     try{
-        file.bufferedReader().readLines().forEach { line ->
+        file.bufferedReader(charset = Charsets.UTF_8).readLines().forEach { line ->
             val record = line.split("=")
             logger.debug("Read: $line")
 
