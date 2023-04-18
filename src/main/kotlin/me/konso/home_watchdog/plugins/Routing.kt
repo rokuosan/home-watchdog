@@ -1,4 +1,4 @@
-package me.konso.plugins
+package me.konso.home_watchdog.plugins
 
 import io.ktor.server.routing.*
 import io.ktor.server.response.*
