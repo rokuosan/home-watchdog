@@ -2,6 +2,7 @@ package me.konso.home_watchdog
 
 import io.ktor.server.application.*
 import io.ktor.utils.io.charsets.Charsets
+import me.konso.home_watchdog.plugins.configureHTTP
 import me.konso.home_watchdog.plugins.configureLogging
 import me.konso.home_watchdog.plugins.configureRouting
 import java.io.File
@@ -13,6 +14,7 @@ fun main(args: Array<String>): Unit=
 fun Application.module() {
     setEnvParam()
 
+    configureHTTP()
     configureLogging()
     configureRouting()
 }
