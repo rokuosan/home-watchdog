@@ -1,0 +1,21 @@
+openapi: "3.0.3"
+info:
+  title: "home_watchdog API"
+  description: "home_watchdog API"
+  version: "1.0.0"
+servers:
+- url: "https://home_watchdog"
+paths:
+  /:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Hello World!"
