@@ -21,10 +21,16 @@ repositories {
 }
 
 dependencies {
+    // Ktor Cores
     implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
-    implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("io.ktor:ktor-server-config-yaml:$ktor_version")
+    implementation("io.ktor:ktor-server-call-logging-jvm:$ktor_version")
+
+    // Logger
+    implementation("ch.qos.logback:logback-classic:$logback_version")
+
+    // Test
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }
