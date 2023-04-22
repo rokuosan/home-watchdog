@@ -1,10 +1,15 @@
 package me.konso.home_watchdog
 
+import com.linecorp.bot.client.LineMessagingClient
+import com.linecorp.bot.client.LineMessagingClientBuilder
 import io.ktor.server.application.*
 import io.ktor.utils.io.charsets.Charsets
 import me.konso.home_watchdog.plugins.configureHTTP
 import me.konso.home_watchdog.plugins.configureLogging
 import me.konso.home_watchdog.plugins.configureRouting
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import org.slf4j.LoggerFactory
 import java.io.File
 
 fun main(args: Array<String>): Unit=
@@ -13,10 +18,31 @@ fun main(args: Array<String>): Unit=
 @Suppress("unused") // application.conf references the main function. This annotation prevents the IDE from marking it as unused.
 fun Application.module() {
     setEnvParam()
+    initLINEBot()
 
     configureHTTP()
     configureLogging()
     configureRouting()
+}
+
+/**
+ *
+ */
+fun initLINEBot(){
+    val token = System.getProperty("CHANNEL_ACCESS_TOKEN")
+
+    val client = LineMessagingClient
+        .builder(token)
+        .okHttpClientBuilder(OkHttpClient.Builder()
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level=HttpLoggingInterceptor.Level.NONE
+            }), true)
+        .build()
+
+    val l = LoggerFactory.getLogger("com.linecorp.bot.client.wire")
+    HttpLoggingInterceptor(l::info).level = HttpLoggingInterceptor.Level.NONE
+
+    Store.LINEBotClient = client
 }
 
 
@@ -37,7 +63,7 @@ fun setEnvParam(){
 
     try{
         file.bufferedReader(charset = Charsets.UTF_8).readLines().forEach { line ->
-            val record = line.split("=")
+            val record = line.split("=", limit = 2)
             logger.debug("Read: $line")
 
             if(record.size == 2){
