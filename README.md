@@ -16,6 +16,19 @@ APIサーバとしてKtorを利用しています。
 $ git clone https://github.com/rokuosan/home-watchdog
 ```
 
+### Write .env file
+
+```shell
+$ nano .env
+```
+
+Set your API tokens.
+
+```properties
+CHANNEL_SECRET=<YOUR_CHANNEL_SECRET>
+CHANNEL_ACCESS_TOKEN=<YOUR_ACCESS_TOKEN>
+```
+
 ### Launch Postgres
 
 ```shell
