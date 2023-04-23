@@ -11,6 +11,7 @@ import kotlinx.serialization.json.jsonObject
 import me.konso.home_watchdog.Store
 import me.konso.home_watchdog.entities.LineCommonProperty
 import me.konso.home_watchdog.events.followEvent
+import me.konso.home_watchdog.events.unfollowEvent
 import me.konso.home_watchdog.utils.verifySignatures
 
 fun Route.lineRoute(){
@@ -55,6 +56,7 @@ fun Route.lineRoute(){
                         logger.debug(type)
                         when(type){
                             "follow" -> { followEvent(event)  }
+                            "unfollow" -> { unfollowEvent(event) }
                             else -> {}
                         }
                     }
