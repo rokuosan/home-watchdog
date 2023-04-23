@@ -3,6 +3,7 @@ package me.konso.home_watchdog
 import com.linecorp.bot.client.LineMessagingClient
 import io.ktor.server.application.*
 import io.ktor.utils.io.charsets.Charsets
+import me.konso.home_watchdog.database.DatabaseFactory
 import me.konso.home_watchdog.plugins.configureHTTP
 import me.konso.home_watchdog.plugins.configureLogging
 import me.konso.home_watchdog.plugins.configureRouting
@@ -17,6 +18,7 @@ fun main(args: Array<String>): Unit=
 @Suppress("unused") // application.conf references the main function. This annotation prevents the IDE from marking it as unused.
 fun Application.module() {
     setEnvParam()
+    DatabaseFactory.init()
     initLINEBot()
 
     configureHTTP()
