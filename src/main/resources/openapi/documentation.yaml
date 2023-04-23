@@ -18,4 +18,7 @@ paths:
                 type: "string"
               examples:
                 Example#1:
-                  value: "Hello World!"
+                  value: "Home Watchdog v0.1"
+  /api/line/callback:
+    post:
+      description: ""
