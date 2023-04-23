@@ -1,6 +1,8 @@
 package me.konso.home_watchdog.database
 
 import kotlinx.coroutines.Dispatchers
+import me.konso.home_watchdog.Store
+import me.konso.home_watchdog.database.dao.DaoFacadeImpl
 import me.konso.home_watchdog.database.models.Users
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -12,6 +14,9 @@ object DatabaseFactory{
         val driver = "org.postgresql.Driver"
         val url = "jdbc:postgresql://10.10.10.101:5432/postgres"
         val database = Database.connect(url, driver, user = "postgres", password = "sample")
+        val dao = DaoFacadeImpl().apply {
+            Store.dao = this
+        }
 
         transaction(database) {
             SchemaUtils.create(Users)
