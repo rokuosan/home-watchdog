@@ -26,7 +26,7 @@ fun Application.module() {
 }
 
 /**
- *
+ * LINE Bot SDK で利用するボットクライアントの初期化処理を行う関数
  */
 fun initLINEBot(){
     val token = System.getProperty("CHANNEL_ACCESS_TOKEN")
