@@ -1,7 +1,6 @@
 package me.konso.home_watchdog
 
 import com.linecorp.bot.client.LineMessagingClient
-import com.linecorp.bot.client.LineMessagingClientBuilder
 import io.ktor.server.application.*
 import io.ktor.utils.io.charsets.Charsets
 import me.konso.home_watchdog.plugins.configureHTTP
