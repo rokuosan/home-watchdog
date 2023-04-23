@@ -9,7 +9,7 @@ data class User(
 )
 
 object Users: Table(){
-    val id = varchar("id", 64).uniqueIndex()
+    val id = varchar("id", 64)
     val isAuthorized = bool("is_authorized").default(false)
     val permissionLevel = integer("permission_level").default(0)
 
