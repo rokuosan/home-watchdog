@@ -9,8 +9,6 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 class DaoFacadeImpl: DaoFacade{
     private fun toUser(row: ResultRow) = User(
         id = row[Users.id],
-        nickname = row[Users.nickname],
-        identifier = row[Users.identifier],
         isAuthorized = row[Users.isAuthorized],
         permissionLevel = row[Users.permissionLevel]
     )
@@ -19,21 +17,20 @@ class DaoFacadeImpl: DaoFacade{
         Users.selectAll().map(::toUser)
     }
 
-    override suspend fun getUserById(id: Int): User? = query {
+    override suspend fun getUserById(id: String): User? = query {
         Users.select{ Users.id eq id }.map(::toUser).singleOrNull()
     }
 
-    override suspend fun addUser(nickname: String, identifier: String): User? = query {
+    override suspend fun addUser(id: String): User? = query {
         val ins = Users.insert {
-            it[Users.nickname] = nickname
-            it[Users.identifier] = identifier
+            it[Users.id] = id
             it[isAuthorized] = false
             it[permissionLevel] = 0
         }
         ins.resultedValues?.singleOrNull()?.let(::toUser)
     }
 
-    override suspend fun changePermissionLevel(id: Int, level: Int): User? = query {
+    override suspend fun changePermissionLevel(id: String, level: Int): User? = query {
         if(Users.update({Users.id eq id}){
             it[permissionLevel] = level
         } > 0){
@@ -43,7 +40,7 @@ class DaoFacadeImpl: DaoFacade{
         }
     }
 
-    override suspend fun authorize(id: Int, authorized: Boolean): User? = query {
+    override suspend fun authorize(id: String, authorized: Boolean): User? = query {
         if(Users.update({Users.id eq id}){
                 it[isAuthorized] = authorized
             } > 0){
@@ -53,7 +50,7 @@ class DaoFacadeImpl: DaoFacade{
         }
     }
 
-    override suspend fun deleteUser(id: Int): Boolean = query {
+    override suspend fun deleteUser(id: String): Boolean = query {
         Users.deleteWhere { Users.id eq id } > 0
     }
 
