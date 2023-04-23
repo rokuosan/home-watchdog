@@ -48,12 +48,11 @@ fun Route.lineRoute(){
                         call.response.status(HttpStatusCode.BadRequest)
                         return@post
                     }
-
                     for(e in events){
                         val event = e.jsonObject.toMap()
                         val type = event[LineCommonProperty.TYPE_STRING.key].toString()
                                 .toLowerCasePreservingASCIIRules().replace("\"", "", true)
-                        logger.info(type)
+                        logger.debug(type)
                         when(type){
                             "follow" -> { followEvent(event)  }
                             else -> {}
