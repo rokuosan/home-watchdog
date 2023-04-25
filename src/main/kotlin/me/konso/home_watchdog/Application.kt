@@ -52,7 +52,7 @@ fun initLINEBot(){
  * ファイルフォーマットは``KEY=VALUE``として読み取ります。
  */
 fun setEnvParam(){
-    val logger = Store.SystemLogger
+    val logger = Store.Loggers.System
 
     logger.info("Reading .env file...")
 

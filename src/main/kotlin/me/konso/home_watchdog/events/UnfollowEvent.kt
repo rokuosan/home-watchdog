@@ -12,7 +12,7 @@ import me.konso.home_watchdog.entities.LineCommonProperty
  * 主にデータベースから該当のユーザーデータを削除します。
  */
 suspend fun unfollowEvent(json: Map<String, JsonElement>){
-    val logger = Store.SystemLogger
+    val logger = Store.Loggers.System
     val dao = Store.dao
 
     try{

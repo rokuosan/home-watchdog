@@ -16,7 +16,7 @@ import java.io.File
 
 object DatabaseFactory{
     fun init(){
-        val logger = Store.SystemLogger
+        val logger = Store.Loggers.Debugger
 
         try {
             val jsonFormat = Json{prettyPrint=true}

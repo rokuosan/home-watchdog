@@ -15,7 +15,7 @@ import me.konso.home_watchdog.events.unfollowEvent
 import me.konso.home_watchdog.utils.verifySignatures
 
 fun Route.lineRoute(){
-    val logger = Store.SystemLogger
+    val logger = Store.Loggers.System
 
     /**
      * LINEサービスで利用されるエンドポイント

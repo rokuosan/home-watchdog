@@ -9,7 +9,7 @@ import me.konso.home_watchdog.Store
 import me.konso.home_watchdog.entities.LineCommonProperty
 
 suspend fun followEvent(json:  Map<String, JsonElement>){
-    val logger = Store.SystemLogger
+    val logger = Store.Loggers.System
     val client = Store.LINEBotClient
     val dao = Store.dao
 

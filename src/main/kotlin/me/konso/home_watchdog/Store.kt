@@ -7,7 +7,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 object Store {
-    val SystemLogger: Logger= LoggerFactory.getLogger("System")
     lateinit var LINEBotClient: LineMessagingClient
     lateinit var dao: DaoFacade
 
@@ -18,5 +17,10 @@ object Store {
             databaseUser = "postgres",
             databasePass = "postgres"
         )
+    }
+
+    object Loggers{
+        val System: Logger = LoggerFactory.getLogger("System")
+        val Debugger: Logger = LoggerFactory.getLogger("Debugger")
     }
 }

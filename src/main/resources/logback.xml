@@ -9,6 +9,7 @@
     </root>
     <logger name="org.eclipse.jetty" level="INFO"/>
     <logger name="io.netty" level="INFO"/>
-    <logger name="System" level="DEBUG" />
+    <logger name="System" level="INFO" />
     <logger name="com.linecorp.bot.client.wire" level="ERROR" />
+    <logger name="Debugger" level="DEBUG" />
 </configuration>
