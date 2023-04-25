@@ -4,10 +4,14 @@ val logback_version: String by project
 val line_version: String by project
 val okhttp_version: String by project
 val exposed_version: String by project
+val postgres_version: String by project
+val kaml_version: String by project
+
 
 plugins {
     kotlin("jvm") version "1.8.20"
     id("io.ktor.plugin") version "2.2.4"
+    kotlin("plugin.serialization") version "1.8.20"
 }
 
 group="me.konso"
@@ -42,7 +46,10 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
 
     // Postgres
-    implementation("org.postgresql:postgresql:42.2.27")
+    implementation("org.postgresql:postgresql:$postgres_version")
+
+    // YAML
+    implementation("com.charleskorn.kaml:kaml:$kaml_version")
 
     // LINE
     implementation("com.linecorp.bot:line-bot-model:$line_version")
