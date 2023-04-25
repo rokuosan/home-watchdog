@@ -2,6 +2,8 @@ package me.konso.home_watchdog.events
 
 import com.linecorp.bot.model.ReplyMessage
 import com.linecorp.bot.model.message.TextMessage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
@@ -38,10 +40,14 @@ suspend fun followEvent(json:  Map<String, JsonElement>){
         }
 
         // Send message
-        val res = client.replyMessage(ReplyMessage(
-            replyToken,
-            TextMessage(msg)
-        )).get()
+        val res = withContext(Dispatchers.IO) {
+            client.replyMessage(
+                ReplyMessage(
+                    replyToken,
+                    TextMessage(msg)
+                )
+            ).get()
+        }
         logger.debug(res.toString())
     }catch (ignored: Exception){
     }
