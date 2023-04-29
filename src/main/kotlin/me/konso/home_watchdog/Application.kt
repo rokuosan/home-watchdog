@@ -7,6 +7,7 @@ import me.konso.home_watchdog.database.DatabaseFactory
 import me.konso.home_watchdog.plugins.configureHTTP
 import me.konso.home_watchdog.plugins.configureLogging
 import me.konso.home_watchdog.plugins.configureRouting
+import me.konso.home_watchdog.plugins.initShutdownURL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.slf4j.LoggerFactory
@@ -18,6 +19,7 @@ fun main(args: Array<String>): Unit=
 @Suppress("unused") // application.conf references the main function. This annotation prevents the IDE from marking it as unused.
 fun Application.module() {
     initDotEnvParam()
+    initShutdownURL()
     DatabaseFactory.init()
     initLINEBot()
 
