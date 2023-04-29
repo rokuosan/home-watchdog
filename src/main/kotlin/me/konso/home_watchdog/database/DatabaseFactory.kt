@@ -88,7 +88,6 @@ object DatabaseFactory{
                     con.inputStream.bufferedReader(Charsets.UTF_8).use{br ->
                         br.readLines().joinToString("")
                     }
-                    con.disconnect()
                 }
             }catch (ignored: Exception){
             }
