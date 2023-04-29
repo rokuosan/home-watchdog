@@ -1,6 +1,9 @@
 package me.konso.home_watchdog.database
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -13,6 +16,8 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.io.File
+import java.net.HttpURLConnection
+import java.net.URL
 
 object DatabaseFactory{
     fun init(){
@@ -64,7 +69,29 @@ object DatabaseFactory{
 
         }catch (e : Exception){
             logger.info("DB接続に失敗しました。接続情報を確認してください。")
-            e.printStackTrace()
+            try{
+                CoroutineScope(context = Dispatchers.IO).launch {
+                    logger.debug("サーバー停止処理を開始します")
+                    delay(1000)
+                    val host = "localhost"
+                    var port = "8080"
+                    val shutdown = Store.shutdown
+                    Store.config.propertyOrNull("port")?.apply {
+                        port = this.toString()
+                    }
+                    val url = "http://$host:$port/${shutdown.replaceFirst("/", "")}"
+                    logger.debug("ShutdownURL($url)にアクセスします")
+                    val con = URL(url).openConnection() as HttpURLConnection
+                    con.readTimeout = 5_000
+                    con.connectTimeout = 5_000
+                    con.connect()
+                    con.inputStream.bufferedReader(Charsets.UTF_8).use{br ->
+                        br.readLines().joinToString("")
+                    }
+                    con.disconnect()
+                }
+            }catch (ignored: Exception){
+            }
         }
     }
 
