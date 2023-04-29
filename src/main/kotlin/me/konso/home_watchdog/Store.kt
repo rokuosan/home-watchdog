@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory
 object Store {
     lateinit var LINEBotClient: LineMessagingClient
     lateinit var dao: DaoFacade
+    lateinit var shutdown: String
 
     object Defaults{
         val DATABASE_CONFIG = DatabaseConfig(
