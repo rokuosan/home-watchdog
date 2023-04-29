@@ -17,7 +17,7 @@ fun main(args: Array<String>): Unit=
 
 @Suppress("unused") // application.conf references the main function. This annotation prevents the IDE from marking it as unused.
 fun Application.module() {
-    setEnvParam()
+    initDotEnvParam()
     DatabaseFactory.init()
     initLINEBot()
 
@@ -51,7 +51,8 @@ fun initLINEBot(){
  * .envファイルを読み取りシステムプロパティに定義する関数
  * ファイルフォーマットは``KEY=VALUE``として読み取ります。
  */
-fun setEnvParam(){
+fun Application.initDotEnvParam(){
+    Store.config = environment.config
     val logger = Store.Loggers.System
 
     logger.info("Reading .env file...")

@@ -1,6 +1,7 @@
 package me.konso.home_watchdog
 
 import com.linecorp.bot.client.LineMessagingClient
+import io.ktor.server.config.*
 import me.konso.home_watchdog.database.dao.DaoFacade
 import me.konso.home_watchdog.entities.DatabaseConfig
 import org.slf4j.Logger
@@ -10,6 +11,7 @@ object Store {
     lateinit var LINEBotClient: LineMessagingClient
     lateinit var dao: DaoFacade
     lateinit var shutdown: String
+    lateinit var config: ApplicationConfig
 
     object Defaults{
         val DATABASE_CONFIG = DatabaseConfig(
