@@ -4,15 +4,10 @@ import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
-import io.ktor.util.*
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.jsonArray
-import kotlinx.serialization.json.jsonObject
 import me.konso.home_watchdog.Store
-import me.konso.home_watchdog.entities.LineCommonProperty
-import me.konso.home_watchdog.events.followEvent
-import me.konso.home_watchdog.events.receiveMessageEvent
-import me.konso.home_watchdog.events.unfollowEvent
+import me.konso.home_watchdog.entities.LineWebhook
 import me.konso.home_watchdog.utils.verifySignatures
 
 fun Route.lineRoute(){
@@ -40,27 +35,16 @@ fun Route.lineRoute(){
                     }
 
                     // Format Check
-                    val json = Json.parseToJsonElement(body).jsonObject.toMap()
+                    val json = Json.decodeFromString<LineWebhook>(body)
 
                     // Get events
-                    val events = json["events"]?.jsonArray
+                    val events = json.events
 
                     // Action
-                    if(events == null){
-                        call.response.status(HttpStatusCode.BadRequest)
-                        return@post
-                    }
                     for(e in events){
-                        val event = e.jsonObject.toMap()
-                        val type = event[LineCommonProperty.TYPE_STRING.key].toString()
-                                .toLowerCasePreservingASCIIRules().replace("\"", "", true)
+                        val type = e.type
                         logger.debug(type)
-                        when(type){
-                            "follow" -> { followEvent(event)  }
-                            "unfollow" -> { unfollowEvent(event) }
-                            "message" -> { receiveMessageEvent(event) }
-                            else -> {}
-                        }
+                        e.executeEvent()
                     }
 
                     // Return

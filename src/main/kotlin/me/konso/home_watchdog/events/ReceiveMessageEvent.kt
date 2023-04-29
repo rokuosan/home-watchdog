@@ -1,17 +1,10 @@
 package me.konso.home_watchdog.events
 
-import com.linecorp.bot.parser.WebhookParser
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.jsonPrimitive
 import me.konso.home_watchdog.Store
-import me.konso.home_watchdog.entities.EventObject
-import me.konso.home_watchdog.entities.WebhookObject
+import me.konso.home_watchdog.entities.LineEvent
 
 
-suspend fun receiveMessageEvent(json: Map<String, JsonElement>){
+suspend fun receiveMessageEvent(json: LineEvent){
     val logger = Store.Loggers.System
     val debugger = Store.Loggers.Debugger
     val client = Store.LINEBotClient
@@ -29,11 +22,8 @@ suspend fun receiveMessageEvent(json: Map<String, JsonElement>){
 
     }
 
-    val rawString = Json.encodeToString(json)
-    debugger.debug(rawString)
     try{
-        val webhook = Json.decodeFromString<EventObject>(rawString)
-        debugger.debug(webhook.toString())
+        debugger.debug(json.toString())
     }catch (e: Exception){
         e.printStackTrace()
     }

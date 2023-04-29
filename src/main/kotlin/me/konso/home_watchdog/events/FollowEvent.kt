@@ -4,24 +4,21 @@ import com.linecorp.bot.model.ReplyMessage
 import com.linecorp.bot.model.message.TextMessage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
 import me.konso.home_watchdog.Store
-import me.konso.home_watchdog.entities.LineCommonProperty
+import me.konso.home_watchdog.entities.LineEvent
 
-suspend fun followEvent(json:  Map<String, JsonElement>){
+suspend fun followEvent(json:  LineEvent){
     val logger = Store.Loggers.System
     val client = Store.LINEBotClient
     val dao = Store.dao
 
     try{
         // Get reply token
-        val replyToken = json["replyToken"]?.jsonPrimitive?.content?:""
+        val replyToken = json.replyToken
         logger.debug(json.toString())
 
         // Get user id
-        val userId = json[LineCommonProperty.SOURCE_OBJECT.key]!!.jsonObject["userId"]!!.jsonPrimitive.content
+        val userId = json.source?.userId?:""
         logger.debug("UserID: $userId")
 
 
