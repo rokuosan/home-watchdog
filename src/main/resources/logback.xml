@@ -12,4 +12,5 @@
     <logger name="System" level="INFO" />
     <logger name="com.linecorp.bot.client.wire" level="ERROR" />
     <logger name="Debugger" level="DEBUG" />
+    <logger name="Exposed" level="OFF" />
 </configuration>
