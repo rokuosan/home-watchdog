@@ -42,8 +42,6 @@ fun Route.lineRoute(){
 
                     // Action
                     for(e in events){
-                        val type = e.type
-                        logger.debug(type)
                         e.executeEvent()
                     }
 
