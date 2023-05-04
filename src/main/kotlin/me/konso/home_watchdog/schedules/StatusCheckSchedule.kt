@@ -82,6 +82,7 @@ private suspend fun sendConnectionAlert(server: String, goneDown: Boolean){
     val users = Store.dao.getAllUsers()
 
     for(user in users){
+        if(user.notificationLevel < 1) continue
         val push = PushMessage(user.id, TextMessage(msg))
 
         try{
