@@ -3,6 +3,7 @@ package me.konso.home_watchdog.events
 import com.linecorp.bot.model.ReplyMessage
 import com.linecorp.bot.model.message.TextMessage
 import me.konso.home_watchdog.Store
+import me.konso.home_watchdog.database.models.User
 import me.konso.home_watchdog.entities.line.LineEvent
 import java.io.File
 
@@ -18,47 +19,48 @@ suspend fun receiveMessageEvent(json: LineEvent){
         val user = dao.getUserById(json.source?.userId?:"")?:return
 
         // Switch process by authorization
-        if(user.isAuthorized){
-            client.replyMessage(
-                ReplyMessage(
-                    json.replyToken,
-                    TextMessage("こんにちは")
-                )
-            )
-        }else{
-            val map = readInvitationCode().toMutableMap()
-
-            // Check code
-            var isValid = false
-            val k = json.message?.text?:""
-            val v = map[k]?:true
-            if(!v){
-                isValid = true
-                map[k] = true
-                updateInvitationCode(map)
-                dao.authorize(user.id, true)
-
-                logger.info("User[{}] was authorized by code {}", user.id, k)
-            }
-
-            val msg = if(!isValid){
-                "無効な認証情報です。"
-            }else{
-                "認証されました。"
-            }
-
-            client.replyMessage(
-                ReplyMessage(
-                    json.replyToken,
-                    TextMessage(msg)
-                )
-            )
-
+        if(!user.isAuthorized){
+            challengeAuthorization(json, user)
+            return
         }
 
     }catch (ignored: Exception){
         logger.debug("Execution Failed: {}", json)
     }
+}
+
+suspend fun challengeAuthorization(json: LineEvent, user: User){
+    val logger = Store.Loggers.System
+    val client = Store.LINEBotClient
+    val dao = Store.dao
+
+    val map = readInvitationCode().toMutableMap()
+
+    // Check code
+    var isValid = false
+    val k = json.message?.text?:""
+    val v = map[k]?:true
+    if(!v){
+        isValid = true
+        map[k] = true
+        updateInvitationCode(map)
+        dao.authorize(user.id, true)
+
+        logger.info("User[{}] was authorized by code {}", user.id, k)
+    }
+
+    val msg = if(!isValid){
+        "無効な認証情報です。"
+    }else{
+        "認証されました。"
+    }
+
+    client.replyMessage(
+        ReplyMessage(
+            json.replyToken,
+            TextMessage(msg)
+        )
+    )
 }
 
 fun readInvitationCode(): Map<String, Boolean>{
