@@ -1,5 +1,9 @@
 package me.konso.home_watchdog.events
 
+import com.aallam.openai.api.completion.CompletionRequest
+import com.aallam.openai.api.model.ModelId
+import com.aallam.openai.client.OpenAI
+import com.aallam.openai.client.OpenAIConfig
 import com.linecorp.bot.model.ReplyMessage
 import com.linecorp.bot.model.message.TextMessage
 import me.konso.home_watchdog.Store
@@ -13,6 +17,7 @@ suspend fun receiveMessageEvent(json: LineEvent){
     val debugger = Store.Loggers.Debugger
     val client = Store.LINEBotClient
     val dao = Store.dao
+    val talkStatus = mutableMapOf<String, Int>()
 
     try{
         // Get user from database
@@ -24,9 +29,76 @@ suspend fun receiveMessageEvent(json: LineEvent){
             return
         }
 
-    }catch (ignored: Exception){
-        logger.debug("Execution Failed: {}", json)
+        // Set default value
+        if(!talkStatus.contains(user.id)){
+            talkStatus[user.id] = 0
+        }
+
+        // Switch process by talking status
+        when(talkStatus[user.id]?:0){
+            1 -> {
+                interactSettings(json, user)
+            }
+            0 -> {
+                val message = json.message!!
+                val text = message.text?:""
+
+                if(text.startsWith("//")){
+                    val tokens = text.split(" ")
+                    when(tokens[0]){
+                        "//settings" -> {
+                            talkStatus[user.id] = 1
+                        }
+                        else -> {
+                            client.replyMessage(
+                                ReplyMessage(
+                                    json.replyToken,
+                                    TextMessage("Syntax Error")
+                                )
+                            )
+                        }
+                    }
+                }else{
+                    client.replyMessage(
+                        ReplyMessage(
+                            json.replyToken,
+                            TextMessage("OK")
+                        )
+                    )
+                }
+            }
+        }
+
+    }catch (e: Exception){
+        e.printStackTrace()
+        logger.info("Execution Failed: {}", json)
     }
+}
+
+fun interactSettings(json: LineEvent, user: User){
+
+}
+
+suspend fun responseByChatGPT(msg: String, replyToken: String){
+    val prompt = msg.trim()
+    if(prompt.length > 256) return
+
+    val req = CompletionRequest(
+        model = ModelId("text-ada-001"),
+        prompt = prompt,
+        echo = true
+    )
+
+    val comp = Store.openai.completion(req)
+    println(comp)
+
+
+    Store.LINEBotClient.replyMessage(
+        ReplyMessage(
+            replyToken,
+            TextMessage(comp.choices[0].text)
+        )
+    )
 }
 
 suspend fun challengeAuthorization(json: LineEvent, user: User){
