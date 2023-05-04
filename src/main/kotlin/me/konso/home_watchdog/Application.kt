@@ -8,6 +8,7 @@ import me.konso.home_watchdog.plugins.configureHTTP
 import me.konso.home_watchdog.plugins.configureLogging
 import me.konso.home_watchdog.plugins.configureRouting
 import me.konso.home_watchdog.plugins.initShutdownURL
+import me.konso.home_watchdog.schedules.SchedulerManager
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.slf4j.LoggerFactory
@@ -22,6 +23,7 @@ fun Application.module() {
     initShutdownURL()
     DatabaseFactory.init()
     initLINEBot()
+    SchedulerManager.init()
 
     configureHTTP()
     configureLogging()
