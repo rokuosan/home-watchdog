@@ -14,6 +14,8 @@ object Store {
     lateinit var shutdown: String
     lateinit var config: ApplicationConfig
 
+    val ServerStatus: MutableMap<String, Boolean> = mutableMapOf()
+
     object Defaults{
         val DATABASE_CONFIG = DatabaseConfig(
             databaseDriver = "org.postgresql.Driver",
