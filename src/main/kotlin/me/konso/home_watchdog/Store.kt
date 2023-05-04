@@ -1,5 +1,6 @@
 package me.konso.home_watchdog
 
+import com.aallam.openai.client.OpenAI
 import com.linecorp.bot.client.LineMessagingClient
 import io.ktor.server.config.*
 import me.konso.home_watchdog.database.dao.DaoFacade
@@ -13,6 +14,7 @@ object Store {
     lateinit var dao: DaoFacade
     lateinit var shutdown: String
     lateinit var config: ApplicationConfig
+    lateinit var openai: OpenAI
 
     val ServerStatus: MutableMap<String, Boolean> = mutableMapOf()
 

@@ -1,5 +1,9 @@
 package me.konso.home_watchdog
 
+import com.aallam.openai.api.http.Timeout
+import com.aallam.openai.api.logging.LogLevel
+import com.aallam.openai.client.OpenAI
+import com.aallam.openai.client.OpenAIConfig
 import com.linecorp.bot.client.LineMessagingClient
 import io.ktor.server.application.*
 import io.ktor.utils.io.charsets.Charsets
@@ -13,6 +17,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.slf4j.LoggerFactory
 import java.io.File
+import kotlin.time.Duration.Companion.seconds
 
 fun main(args: Array<String>): Unit=
     io.ktor.server.netty.EngineMain.main(args)
@@ -24,10 +29,24 @@ fun Application.module() {
     DatabaseFactory.init()
     initLINEBot()
     SchedulerManager.init()
+    initOpenAI()
 
     configureHTTP()
     configureLogging()
     configureRouting()
+}
+
+fun initOpenAI(){
+    val config = OpenAIConfig(
+        token = System.getProperty("OPENAI_SECRET"),
+        logLevel = LogLevel.None,
+        timeout = Timeout(
+            request = 60.seconds,
+            socket = 20.seconds,
+            connect = 20.seconds
+        )
+    )
+    Store.openai = OpenAI(config)
 }
 
 /**
