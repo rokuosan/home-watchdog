@@ -51,6 +51,10 @@ dependencies {
     // YAML
     implementation("com.charleskorn.kaml:kaml:$kaml_version")
 
+    // OpenAI
+    implementation("com.aallam.openai:openai-client:3.2.3")
+    implementation("io.ktor:ktor-client-okhttp:$ktor_version")
+
     // LINE
     implementation("com.linecorp.bot:line-bot-model:$line_version")
     implementation("com.linecorp.bot:line-bot-parser:$line_version")
