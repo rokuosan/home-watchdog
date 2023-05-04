@@ -5,9 +5,9 @@ import com.linecorp.bot.model.message.TextMessage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import me.konso.home_watchdog.Store
-import me.konso.home_watchdog.entities.LineEvent
+import me.konso.home_watchdog.entities.line.LineEvent
 
-suspend fun followEvent(json:  LineEvent){
+suspend fun followEvent(json: LineEvent){
     val logger = Store.Loggers.System
     val client = Store.LINEBotClient
     val dao = Store.dao

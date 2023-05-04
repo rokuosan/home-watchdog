@@ -7,7 +7,7 @@ import io.ktor.server.routing.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import me.konso.home_watchdog.Store
-import me.konso.home_watchdog.entities.LineWebhook
+import me.konso.home_watchdog.entities.line.LineWebhook
 import me.konso.home_watchdog.utils.verifySignatures
 
 fun Route.lineRoute(){

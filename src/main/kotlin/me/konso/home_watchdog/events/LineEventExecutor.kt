@@ -1,6 +1,6 @@
 package me.konso.home_watchdog.events
 
-import me.konso.home_watchdog.entities.LineEvent
+import me.konso.home_watchdog.entities.line.LineEvent
 
 suspend fun LineEvent.execute(){
     when(type){

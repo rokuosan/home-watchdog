@@ -1,10 +1,9 @@
 package me.konso.home_watchdog.events
 
 import com.linecorp.bot.model.ReplyMessage
-import com.linecorp.bot.model.message.Message
 import com.linecorp.bot.model.message.TextMessage
 import me.konso.home_watchdog.Store
-import me.konso.home_watchdog.entities.LineEvent
+import me.konso.home_watchdog.entities.line.LineEvent
 import java.io.File
 
 

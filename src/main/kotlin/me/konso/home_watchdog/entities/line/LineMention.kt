@@ -1,4 +1,4 @@
-package me.konso.home_watchdog.entities
+package me.konso.home_watchdog.entities.line
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

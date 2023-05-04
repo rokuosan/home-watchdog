@@ -1,7 +1,7 @@
 package me.konso.home_watchdog.events
 
 import me.konso.home_watchdog.Store
-import me.konso.home_watchdog.entities.LineEvent
+import me.konso.home_watchdog.entities.line.LineEvent
 
 /**
  * 友達解除時のイベントハンドラ
