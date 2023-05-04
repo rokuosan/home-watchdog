@@ -10,7 +10,7 @@ import kotlinx.serialization.json.Json
 import me.konso.home_watchdog.Store
 import me.konso.home_watchdog.database.dao.DaoFacadeImpl
 import me.konso.home_watchdog.database.models.Users
-import me.konso.home_watchdog.entities.DatabaseConfig
+import me.konso.home_watchdog.entities.config.DatabaseConfig
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction

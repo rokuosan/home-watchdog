@@ -3,7 +3,7 @@ package me.konso.home_watchdog
 import com.linecorp.bot.client.LineMessagingClient
 import io.ktor.server.config.*
 import me.konso.home_watchdog.database.dao.DaoFacade
-import me.konso.home_watchdog.entities.DatabaseConfig
+import me.konso.home_watchdog.entities.config.DatabaseConfig
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
