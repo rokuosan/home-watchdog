@@ -4,6 +4,7 @@ import com.linecorp.bot.client.LineMessagingClient
 import io.ktor.server.config.*
 import me.konso.home_watchdog.database.dao.DaoFacade
 import me.konso.home_watchdog.entities.config.DatabaseConfig
+import me.konso.home_watchdog.entities.config.TargetsConfig
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -19,6 +20,12 @@ object Store {
             databaseUrl = "jdbc:postgresql://localhost:5432/postgres",
             databaseUser = "postgres",
             databasePass = "postgres"
+        )
+
+        val TARGETS_CONFIG = TargetsConfig(
+            servers = emptyList(),
+            interval = 10_000,
+            timeout = 5_000
         )
     }
 
