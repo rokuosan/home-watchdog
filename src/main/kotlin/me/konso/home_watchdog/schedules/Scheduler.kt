@@ -1,4 +1,4 @@
-package me.konso.home_watchdog.utils
+package me.konso.home_watchdog.schedules
 
 import kotlinx.coroutines.Runnable
 import java.util.concurrent.Executors
