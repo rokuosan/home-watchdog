@@ -10,7 +10,8 @@ class DaoFacadeImpl: DaoFacade{
     private fun toUser(row: ResultRow) = User(
         id = row[Users.id],
         isAuthorized = row[Users.isAuthorized],
-        permissionLevel = row[Users.permissionLevel]
+        permissionLevel = row[Users.permissionLevel],
+        notificationLevel = row[Users.notificationLevel]
     )
 
     override suspend fun getAllUsers(): List<User> = query {
