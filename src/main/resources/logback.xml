@@ -13,4 +13,6 @@
     <logger name="com.linecorp.bot.client.wire" level="ERROR" />
     <logger name="Debugger" level="DEBUG" />
     <logger name="Exposed" level="OFF" />
+    <logger name="me.konso.home_watchdog.utils.Ping" level="INFO" />
+    <logger name="me.konso.home_watchdog.schedules.StatusCheckSchedule" level="INFO" />
 </configuration>
