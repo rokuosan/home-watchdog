@@ -5,6 +5,7 @@ import com.linecorp.bot.client.LineMessagingClient
 import io.ktor.server.config.*
 import me.konso.home_watchdog.database.dao.DaoFacade
 import me.konso.home_watchdog.entities.config.DatabaseConfig
+import me.konso.home_watchdog.entities.config.PythonConfig
 import me.konso.home_watchdog.entities.config.TargetsConfig
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -30,6 +31,14 @@ object Store {
             servers = emptyList(),
             interval = 10_000,
             timeout = 5_000
+        )
+
+        val PYTHON_CONFIG_WINDOWS = PythonConfig(
+            runtime = "./venv/Scripts/python.exe"
+        )
+
+        val PYTHON_CONFIG_LINUX = PythonConfig(
+            runtime = "./venv/bin/python3"
         )
     }
 
