@@ -29,6 +29,31 @@ CHANNEL_SECRET=<YOUR_CHANNEL_SECRET>
 CHANNEL_ACCESS_TOKEN=<YOUR_ACCESS_TOKEN>
 ```
 
+### Create venv (Python)
+
+Make a new environment.
+
+```shell
+# Windows
+$ python -m venv venv
+# Others
+$ python3 -m venv venv
+```
+
+Activate.
+
+```shell
+$ source ./venv/bin/activate
+# or
+$ ./venv/Scripts/Activate.ps1
+```
+
+Install dependencies.
+
+```shell
+$ pip install -r requirements.txt
+```
+
 ### Launch Postgres
 
 ```shell
