@@ -2,14 +2,19 @@ package me.konso.home_watchdog.events
 
 import com.aallam.openai.api.completion.CompletionRequest
 import com.aallam.openai.api.model.ModelId
-import com.aallam.openai.client.OpenAI
-import com.aallam.openai.client.OpenAIConfig
 import com.linecorp.bot.model.ReplyMessage
 import com.linecorp.bot.model.message.TextMessage
+import io.ktor.util.*
+import io.ktor.utils.io.charsets.Charsets
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import me.konso.home_watchdog.Store
 import me.konso.home_watchdog.database.models.User
+import me.konso.home_watchdog.entities.config.PythonConfig
 import me.konso.home_watchdog.entities.line.LineEvent
 import java.io.File
+import java.util.concurrent.TimeUnit
 
 
 suspend fun receiveMessageEvent(json: LineEvent){
@@ -59,10 +64,11 @@ suspend fun receiveMessageEvent(json: LineEvent){
                         }
                     }
                 }else{
+                    val res = askThirdPartyChatGPT(text)
                     client.replyMessage(
                         ReplyMessage(
                             json.replyToken,
-                            TextMessage("OK")
+                            TextMessage(res)
                         )
                     )
                 }
@@ -99,6 +105,54 @@ suspend fun responseByChatGPT(msg: String, replyToken: String){
             TextMessage(comp.choices[0].text)
         )
     )
+}
+
+private fun askThirdPartyChatGPT(prompt: String): String{
+    fun configLoader(): PythonConfig{
+        val file = File("python.config.json")
+        val osname = System.getProperty("os.name").toLowerCasePreservingASCIIRules()
+        val isWindows = osname.contains("windows")
+        val default = if(isWindows){
+            Store.Defaults.PYTHON_CONFIG_WINDOWS
+        }else{
+            Store.Defaults.PYTHON_CONFIG_LINUX
+        }
+
+        // Create new file if it does not exist
+        if(!file.exists()){
+            file.createNewFile()
+            file.bufferedWriter(Charsets.UTF_8).use { bw ->
+                val fj = Json { prettyPrint = true }
+                val raw = fj.encodeToString(default)
+                bw.write(raw)
+                bw.newLine()
+                bw.flush()
+            }
+        }
+
+        // Read from file
+        val text = file.bufferedReader(Charsets.UTF_8).readText()
+        return Json.decodeFromString(text)
+    }
+
+    val config = configLoader()
+    val process = ProcessBuilder(config.runtime, "./python/main.py", prompt.trim())
+        .redirectErrorStream(true).start()
+
+    val msg = if(!process.waitFor(1, TimeUnit.MINUTES)){
+        process.destroy()
+        "Execution Failed: Timed out"
+    }else{
+        if(process.exitValue() != 0){
+            "Execution Failed: Exit Code (${process.exitValue()})"
+        }else{
+            val msg = process.inputReader().readText()
+            println(msg)
+            msg.trim()
+        }
+    }
+
+    return msg
 }
 
 suspend fun challengeAuthorization(json: LineEvent, user: User){
