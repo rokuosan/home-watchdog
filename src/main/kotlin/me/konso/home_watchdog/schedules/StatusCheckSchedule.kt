@@ -18,7 +18,6 @@ import java.util.concurrent.TimeUnit
 class StatusCheckSchedule: Schedule {
     override val name: String = this::class.java.canonicalName
     private val logger = LoggerFactory.getLogger(this::class.java)
-    override var interval: Long = Store.Defaults.TARGETS_CONFIG.interval
     override var scheduler: Scheduler = Scheduler {}
     override var every: Every = Every(Store.Defaults.TARGETS_CONFIG.interval, TimeUnit.MILLISECONDS)
 
@@ -36,7 +35,6 @@ class StatusCheckSchedule: Schedule {
 
             val str = f.bufferedReader(Charsets.UTF_8).readLines().joinToString("").trim()
             val config = Json.decodeFromString<TargetsConfig>(str)
-            this.interval = config.interval
 
             for (server in config.servers){
                 Store.ServerStatus[server] = false
