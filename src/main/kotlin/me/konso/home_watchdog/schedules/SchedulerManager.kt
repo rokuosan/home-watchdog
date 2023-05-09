@@ -15,6 +15,8 @@ class SchedulerManager {
             sm.logger.debug("Registering ${ss.name}")
             sm.addSchedule(ss)
 
+            sm.addSchedule(DailyStatusReportSchedule())
+
             sm.registerAll()
             return sm
         }
