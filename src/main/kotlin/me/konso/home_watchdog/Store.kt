@@ -9,6 +9,7 @@ import me.konso.home_watchdog.entities.config.PythonConfig
 import me.konso.home_watchdog.entities.config.TargetsConfig
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.time.format.DateTimeFormatter
 
 object Store {
     lateinit var LINEBotClient: LineMessagingClient
@@ -18,6 +19,7 @@ object Store {
     lateinit var openai: OpenAI
 
     val ServerStatus: MutableMap<String, Boolean> = mutableMapOf()
+    val DateTimeFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss.SSSSSSSSS")!!
 
     object Defaults{
         val DATABASE_CONFIG = DatabaseConfig(
