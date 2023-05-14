@@ -9,6 +9,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import me.konso.home_watchdog.Store
 import me.konso.home_watchdog.database.dao.DaoFacadeImpl
+import me.konso.home_watchdog.database.models.StatusHistories
 import me.konso.home_watchdog.database.models.Users
 import me.konso.home_watchdog.entities.config.DatabaseConfig
 import org.jetbrains.exposed.sql.Database
@@ -65,6 +66,7 @@ object DatabaseFactory{
             // 初期処理
             transaction(database) {
                 SchemaUtils.create(Users)
+                SchemaUtils.create(StatusHistories)
             }
 
         }catch (e : Exception){

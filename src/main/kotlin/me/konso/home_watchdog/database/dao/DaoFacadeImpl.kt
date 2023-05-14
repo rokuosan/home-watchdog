@@ -1,10 +1,14 @@
 package me.konso.home_watchdog.database.dao
 
+import me.konso.home_watchdog.Store
 import me.konso.home_watchdog.database.models.User
 import me.konso.home_watchdog.database.models.Users
 import me.konso.home_watchdog.database.DatabaseFactory.query
+import me.konso.home_watchdog.database.models.StatusHistories
+import me.konso.home_watchdog.database.models.StatusHistory
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import java.time.LocalDateTime
 
 class DaoFacadeImpl: DaoFacade{
     private fun toUser(row: ResultRow) = User(
@@ -53,6 +57,29 @@ class DaoFacadeImpl: DaoFacade{
 
     override suspend fun deleteUser(id: String): Boolean = query {
         Users.deleteWhere { Users.id eq id } > 0
+    }
+
+    private fun toHistory(row: ResultRow) = StatusHistory(
+        time = row[StatusHistories.time],
+        host = row[StatusHistories.host],
+        status = row[StatusHistories.status]
+    )
+
+    override suspend fun getAllHistories(): List<StatusHistory> = query {
+        StatusHistories.selectAll().map(::toHistory)
+    }
+
+    override suspend fun getHistoriesByHost(host: String): List<StatusHistory> = query {
+        StatusHistories.select { StatusHistories.host eq host }.map(::toHistory)
+    }
+
+    override suspend fun addHistory(host: String, status: Boolean): StatusHistory? = query {
+        val ins = StatusHistories.insert {
+            it[time] = LocalDateTime.now().format(Store.DateTimeFormat)
+            it[StatusHistories.host] = host
+            it[StatusHistories.status] = status
+        }
+        ins.resultedValues?.singleOrNull()?.let(::toHistory)
     }
 
 }
