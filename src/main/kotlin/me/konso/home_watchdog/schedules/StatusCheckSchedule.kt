@@ -47,6 +47,7 @@ class StatusCheckSchedule: Schedule {
                         val prev = Store.ServerStatus[server]?:false
                         val res = p.ping()
                         logger.debug("HOST: $server => $res")
+                        Store.dao.addHistory(server, res)
 
                         Store.ServerStatus[server] = res
 
@@ -84,8 +85,7 @@ private suspend fun sendConnectionAlert(server: String, goneDown: Boolean){
         val push = PushMessage(user.id, TextMessage(msg))
 
         try{
-            val res = Store.LINEBotClient.pushMessage(push).get()
-            println("Alert was sent to ${user.id} [${res.requestId}]")
+            Store.LINEBotClient.pushMessage(push).get()
         }catch (e: Exception){
             e.printStackTrace()
         }
