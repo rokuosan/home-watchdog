@@ -10,7 +10,7 @@ import me.konso.home_watchdog.entities.config.TargetsConfig
 import me.konso.home_watchdog.utils.ConfigReader
 import me.konso.home_watchdog.utils.DefaultFileGenerator
 import me.konso.home_watchdog.utils.Ping
-import java.time.LocalTime
+import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
 
 class DailyStatusReportSchedule: Schedule {
@@ -18,7 +18,11 @@ class DailyStatusReportSchedule: Schedule {
     override var every: Every = Every(Store.Defaults.TARGETS_CONFIG.interval, TimeUnit.MILLISECONDS)
     override var scheduler: Scheduler = Scheduler {}
 
+    private var time: LocalDateTime
+
     init {
+        time = LocalDateTime.now().minusDays(1)
+
         val config: TargetsConfig
         "targets.json".apply {
             DefaultFileGenerator(this).create(Store.Defaults.TARGETS_CONFIG, overwrite = false)
@@ -28,8 +32,10 @@ class DailyStatusReportSchedule: Schedule {
         this.every = Every(1, TimeUnit.MINUTES)
 
         this.scheduler = Scheduler(kotlinx.coroutines.Runnable {
-            val now = LocalTime.now()
+            val now = LocalDateTime.now()
             if(now.hour != 7) return@Runnable
+            if(time.dayOfYear == now.dayOfYear) return@Runnable
+            time = LocalDateTime.now()
 
             val result = mutableMapOf<String, Boolean>()
             config.servers.forEach { server ->
